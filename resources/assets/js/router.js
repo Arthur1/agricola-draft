@@ -1,16 +1,25 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Example from './components/Example.vue';
+import VueRouter from 'vue-router'
+import Vue from 'vue'
+import Index from './components/Example.vue'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
-const routes = [
-	{ path: '/', component: Example },
-];
+export default new VueRouter({
+	mode: 'history',
 
-const router = new VueRouter({
-	routes,
-	mode: 'history'
-});
+	routes: [
+		{
+			path: '/',
+			name: 'Index',
+			component: Index,
+		},
+	],
 
-export default router;
+	scrollBehavior (to, from, savedPosition) {
+		if (savedPosition) {
+			return savedPosition
+		} else {
+			return { x: 0, y: 0 }
+		}
+	},
+})

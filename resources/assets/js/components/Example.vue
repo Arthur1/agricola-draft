@@ -1,6 +1,6 @@
 <template>
 	<div class="collection">
-		<div class="collection-item">Example</div>
+		<div class="collection-item">テスト</div>
 	</div>
 </template>
 

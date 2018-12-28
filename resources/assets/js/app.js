@@ -4,11 +4,10 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+require('./bootstrap')
 
-window.Vue = require('vue');
-
-import App from './App.vue'
+import Vue from 'vue'
+import HeaderBar from './components/HeaderBar.vue'
 import router from './router'
 
 
@@ -18,9 +17,9 @@ import router from './router'
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-element', require('./components/Example.vue'));
+Vue.component('header-bar', HeaderBar)
 
 const app = new Vue({
 	router,
-	render: h => h(App)
-}).$mount('#app');
+	el: '#app'
+})
