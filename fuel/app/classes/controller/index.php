@@ -1,7 +1,7 @@
 <?php
 class Controller_Index extends Controller
 {
-	public function action_example() {
-		return View::forge('example');
+	public function action_index() {
+		return View::forge('index');
 	}
 }
