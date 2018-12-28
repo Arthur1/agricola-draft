@@ -5,4 +5,5 @@ return array(
 
 	// 'hello(/:name)?' => array('welcome/hello', 'name' => 'hello'),
 	'_root_' => 'index',
+	'_404_' => 'index',
 );
