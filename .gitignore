@@ -33,3 +33,6 @@ desktop.ini
 /fuel/app/config/crypt.php
 
 /node_modules/
+/public/assets/js/app.js
+/public/assets/js/materialize.js
+/public/assets/css/app.css
