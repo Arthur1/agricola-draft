@@ -12,6 +12,7 @@
 		<header-bar></header-bar>
 		<router-view></router-view>
 	</div>
+	<?= Security::js_fetch_token(); ?>
 	<?= Asset::js('materialize.js'); ?>
 	<?= Asset::js('app.js'); ?>
 </body>
