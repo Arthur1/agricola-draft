@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<?= Asset::css('app.css'); ?>
 </head>
-<body>
+<body class="grey lighten-5">
 	<div id="app">
 		<header-bar></header-bar>
 		<router-view></router-view>

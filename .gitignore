@@ -36,3 +36,5 @@ desktop.ini
 /public/assets/js/app.js
 /public/assets/js/materialize.js
 /public/assets/css/app.css
+
+/fuel/app/keys/*.key
