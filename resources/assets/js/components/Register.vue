@@ -67,10 +67,23 @@
 				}
 				console.log(params);
 				http.post('/auth/register', params, res => {
-					M.toast({html: 'ユーザー登録に成功しました', classes: 'teal white-text'});
+					M.toast({html: 'ユーザー登録に成功しました', classes: 'teal white-text'})
 					this.$router.push('/')
 				}, err => {
-					M.toast({html: 'ユーザー登録に失敗しました', classes: 'red white-text'});
+					switch (err.response.status) {
+						case 400:
+							for (let message of err.response.data.error.messages) {
+								M.toast({html: message, classes: 'red white-text'})
+							}
+							break;
+						case 401:
+						case 403:
+							console.log(err.response.data.error.detail)
+							M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+							break
+						default:
+							M.toast({html: 'サーバーエラーです', classes: 'red white-text'})
+					}
 				})
 			}
 		}

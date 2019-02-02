@@ -8,10 +8,57 @@ class Controller_Api_Auth extends Controller_Rest
 
 	public function post_login()
 	{
-		$user_data = Auth::validate_user(Input::post('name'), Input::post('password'));
-		if (! $user_data) {
-			return null;
+		// CSRF token check
+		if (! self::check_token()) {
+			$this->status_code = 403;
+			return [
+				'result' => false,
+				'error' => [
+					'message' => 'お手数ですが、再度送信してください'
+				]
+			];
 		}
+
+		$data = Input::json();
+
+		// Validation
+		$val = Validation::forge();
+		$val->add('name', 'ユーザー名')
+			->add_rule('required');
+		$val->add('password', 'パスワード')
+			->add_rule('required');
+		if (! $val->run($data)) {
+			$this->status_code = 400;
+			$messages = [];
+			foreach ($val->error() as $error) {
+				$messages[] = $error->get_message();
+			}
+			return [
+				'result' => false,
+				'error' => [
+					'messages' => $messages,
+				]
+			];
+		}
+
+		// select from users
+		$user_data = Auth::validate_user(Input::json('name'), Input::json('password'));
+		Log::error(print_r($user_data, true));
+		if (! $user_data) {
+			$this->status_code = 401;
+			return [
+				'result' => false,
+				'error' => [
+					'message' => 'アカウントが存在しません'
+				]
+			];
+		}
+
+		// return JWT token
+		return [
+			'result' => true,
+			'token' => self::create_jwt_token($user_data['username'], $user_data['email']),
+		];
 	}
 
 	public function post_register()
@@ -20,8 +67,9 @@ class Controller_Api_Auth extends Controller_Rest
 		if (! self::check_token()) {
 			$this->status_code = 403;
 			return [
+				'result' => false,
 				'error' => [
-					'message' => 'CSRF Token Error'
+					'message' => 'お手数ですが、再度送信してください'
 				]
 			];
 		}
@@ -41,7 +89,16 @@ class Controller_Api_Auth extends Controller_Rest
 			->add_rule('valid_email');
 		if (! $val->run($data)) {
 			$this->status_code = 400;
-			return $val->error();
+			$messages = [];
+			foreach ($val->error() as $error) {
+				$messages[] = $error->get_message();
+			}
+			return [
+				'result' => false,
+				'error' => [
+					'messages' => $messages,
+				]
+			];
 		}
 
 		// create user
@@ -49,23 +106,16 @@ class Controller_Api_Auth extends Controller_Rest
 		if (! $result) {
 			$this->status_code = 403;
 			return [
+				'result' => false,
 				'error' => [
-					'message' => 'CSRF Token Error'
+					'message' => 'このメールアドレスはすでに登録されています'
 				]
 			];
 		}
 		return [
+			'result' => true,
 			'token' => self::create_jwt_token($data['name'], $data['email']),
 		];
-	}
-
-	public function post_test()
-	{
-		$token = Input::headers(Constant::HEADER_INDEX_CSRF);
-		if (Security::check_token($token)) {
-			return ['result' => 'ok'];
-		}
-		return ['result' => 'ng', 'token' => $token];
 	}
 
 	public function after($response)

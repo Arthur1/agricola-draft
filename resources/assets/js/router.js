@@ -2,10 +2,11 @@ import VueRouter from 'vue-router'
 import Vue from 'vue'
 import Index from './components/Example.vue'
 import Register from './components/Register.vue'
+import Login from './components/Login.vue'
 
 Vue.use(VueRouter)
 
-export default new VueRouter({
+const router =new VueRouter({
 	mode: 'history',
 
 	routes: [
@@ -18,7 +19,12 @@ export default new VueRouter({
 			path: '/register',
 			name: 'ユーザー登録',
 			component: Register,
-		}
+		},
+		{
+			path: '/login',
+			name: 'ログイン',
+			component: Login,
+		},
 	],
 
 	scrollBehavior (to, from, savedPosition) {
@@ -29,3 +35,15 @@ export default new VueRouter({
 		}
 	},
 })
+
+router.beforeEach((to, from, next) => {
+	const publicPages = ['/login', '/register', '/feature']
+	const authRequired = !publicPages.includes(to.path)
+	const loggedIn = localStorage.getItem('jwt-token')
+	if (authRequired && ! loggedIn) {
+		return next('/login')
+	}
+	next()
+})
+
+export default router

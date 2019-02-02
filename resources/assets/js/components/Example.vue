@@ -1,6 +1,8 @@
 <template>
-	<div class="collection">
-		<div class="collection-item">テスト</div>
+	<div>
+		<div class="collection">
+			<div class="collection-item">テスト</div>
+		</div>
 		<button class="btn teal" @click="post()">POST</button>
 	</div>
 </template>
