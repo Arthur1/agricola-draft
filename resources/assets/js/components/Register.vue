@@ -32,7 +32,7 @@
 			<div class="modal-content">
 				<h3>利用規約</h3>
 				<p>
-					Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text Dummy Text
+					本アプリケーションの使用に関連してお客様自身または第三者に生じた損害について、その賠償の責任を一切負いかねますことご了承ください。
 				</p>
 			</div>
 			<div class="modal-footer">
@@ -56,6 +56,7 @@
 		mounted: () => {
 			let elems = document.querySelectorAll('.modal');
 			let instances = M.Modal.init(elems, {});
+			M.updateTextFields()
 		},
 		methods: {
 			register() {

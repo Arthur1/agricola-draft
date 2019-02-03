@@ -1,6 +1,6 @@
 import VueRouter from 'vue-router'
 import Vue from 'vue'
-import Index from './components/Example.vue'
+import Index from './components/Home.vue'
 import Register from './components/Register.vue'
 import Login from './components/Login.vue'
 

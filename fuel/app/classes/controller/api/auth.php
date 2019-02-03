@@ -43,7 +43,6 @@ class Controller_Api_Auth extends Controller_Rest
 
 		// select from users
 		$user_data = Auth::validate_user(Input::json('name'), Input::json('password'));
-		Log::error(print_r($user_data, true));
 		if (! $user_data) {
 			$this->status_code = 401;
 			return [
@@ -102,13 +101,31 @@ class Controller_Api_Auth extends Controller_Rest
 		}
 
 		// create user
-		$result = Auth::create_user($data['name'], $data['password'], $data['email']);
+		try {
+			$result = Auth::create_user($data['name'], $data['password'], $data['email']);
+		} catch (SimpleUserUpdateException $e) {
+			$this->status_code = 403;
+			switch ($e->getCode()) {
+				case 2:
+					$message = 'このメールアドレスはすでに登録されています';
+					break;
+				case 3:
+					$message = 'このユーザー名はすでに登録されています';
+					break;
+				default:
+					$message = 'サーバーエラーです';
+			}
+			return [
+				'result' => false,
+				'error' => [ 'message' => $message ],
+			];
+		}
 		if (! $result) {
 			$this->status_code = 403;
 			return [
 				'result' => false,
 				'error' => [
-					'message' => 'このメールアドレスはすでに登録されています'
+					'message' => 'サーバーエラーです'
 				]
 			];
 		}
