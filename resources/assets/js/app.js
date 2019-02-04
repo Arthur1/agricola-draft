@@ -7,6 +7,7 @@
 require('./bootstrap')
 
 import Vue from 'vue'
+import VueJWT from 'vuejs-jwt'
 import HeaderBar from './components/HeaderBar.vue'
 import router from './router'
 
@@ -19,7 +20,12 @@ import router from './router'
 
 Vue.component('header-bar', HeaderBar)
 
+Vue.use(VueJWT, {
+	keyName: 'jwt-token'
+})
+
 const app = new Vue({
 	router,
 	el: '#app'
 })
+
