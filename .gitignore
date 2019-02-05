@@ -38,3 +38,4 @@ desktop.ini
 /public/assets/css/app.css
 
 /fuel/app/keys/*.key
+/fuel/app/keys/*.key.pub

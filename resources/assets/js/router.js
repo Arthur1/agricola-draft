@@ -1,19 +1,20 @@
 import VueRouter from 'vue-router'
 import Vue from 'vue'
-import Index from './components/Home.vue'
+import Home from './components/Home.vue'
 import Register from './components/Register.vue'
 import Login from './components/Login.vue'
+import CreateGame from './components/CreateGame.vue'
 
 Vue.use(VueRouter)
 
-const router =new VueRouter({
+const router = new VueRouter({
 	mode: 'history',
 
 	routes: [
 		{
 			path: '/',
-			name: 'Index',
-			component: Index,
+			name: 'Home',
+			component: Home,
 		},
 		{
 			path: '/register',
@@ -24,6 +25,11 @@ const router =new VueRouter({
 			path: '/login',
 			name: 'ログイン',
 			component: Login,
+		},
+		{
+			path: '/create_game',
+			name: 'ゲーム作成',
+			component: CreateGame,
 		},
 	],
 

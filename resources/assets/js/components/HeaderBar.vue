@@ -3,6 +3,7 @@
 		<ul class="sidenav" id="slide-out">
 			<li><router-link class="sidenav-close" to="/login">ログイン</router-link></li>
 			<li><router-link class="sidenav-close" to="/register">ユーザー登録</router-link></li>
+			<li><router-link class="sidenav-close" to="/create_game">ゲーム作成</router-link></li>
 			<li><a class="sidenav-close" href="javascript:void(0)" @click="logout()" id="logout">ログアウト</a></li>
 		</ul>
 		<header class="navbar-fixed">
@@ -18,6 +19,7 @@
 					<ul class="right hide-on-med-and-down">
 						<li><router-link class="sidenav-close" to="/login">ログイン</router-link></li>
 						<li><router-link class="sidenav-close" to="/register">ユーザー登録</router-link></li>
+						<li><router-link class="sidenav-close" to="/create_game">ゲーム作成</router-link></li>
 						<li><a class="sidenav-close" href="javascript:void(0)" @click="logout()" id="logout">ログアウト</a></li>
 					</ul>
 				</div>

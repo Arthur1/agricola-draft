@@ -13,7 +13,7 @@
 				<label for="form_email">パスワード</label>
 			</div>
 			<div class="col s12 input-field">
-				<button class="btn teal" @click="login()">ログイン</button>
+				<button class="btn teal" @click="login()" v-bind:disabled="is_push">ログイン</button>
 			</div>
 		</div>
 	</div>
@@ -25,7 +25,8 @@
 		data() {
 			return {
 				name: '',
-				password: ''
+				password: '',
+				is_push: false,
 			}
 		},
 		mounted: () => {
@@ -33,6 +34,7 @@
 		},
 		methods: {
 			login() {
+				this.is_push = true
 				let params = {
 					name: this.name,
 					password: this.password
@@ -49,14 +51,14 @@
 							break;
 						case 401:
 						case 403:
-							console.log(err.response.data.error.detail)
 							M.toast({html: err.response.data.error.message, classes: 'red white-text'})
 							break
 						default:
 							M.toast({html: 'サーバーエラーです', classes: 'red white-text'})
 					}
 				})
-			}
+            	this.is_push = false
+        	}
 		}
 	}
 </script>

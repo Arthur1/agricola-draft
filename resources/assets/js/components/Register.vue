@@ -24,7 +24,7 @@
 					<label for="form_email_check">パスワード(確認)</label>
 				</div>
 				<div class="col input-field s12">
-					<button @click="register()" class="btn teal">登録</button>
+					<button @click="register()" class="btn waves-effect waves-light teal" v-bind:disabled="is_push">登録<i class="material-icons right">send</i></button>
 				</div>
 			</div>
 		</div>
@@ -50,7 +50,8 @@
 				name: '',
 				password: '',
 				password_check: '',
-				email: ''
+				email: '',
+				is_push: false,
 			}
 		},
 		mounted: () => {
@@ -60,13 +61,13 @@
 		},
 		methods: {
 			register() {
+				this.is_push = true
 				let params = {
 					name: this.name,
 					email: this.email,
 					password: this.password,
 					password_check: this.password_check
 				}
-				console.log(params);
 				http.post('/auth/register', params, res => {
 					M.toast({html: 'ユーザー登録に成功しました', classes: 'teal white-text'})
 					this.$router.push('/')
@@ -76,16 +77,16 @@
 							for (let message of err.response.data.error.messages) {
 								M.toast({html: message, classes: 'red white-text'})
 							}
-							break;
+							break
 						case 401:
 						case 403:
-							console.log(err.response.data.error.detail)
 							M.toast({html: err.response.data.error.message, classes: 'red white-text'})
 							break
 						default:
 							M.toast({html: 'サーバーエラーです', classes: 'red white-text'})
 					}
 				})
+				this.is_push = false
 			}
 		}
 	}

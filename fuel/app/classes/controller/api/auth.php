@@ -1,6 +1,4 @@
 <?php
-use \Firebase\JWT\JWT;
-
 class Controller_Api_Auth extends Controller_Rest
 {
 	protected $format = 'json';
@@ -56,7 +54,7 @@ class Controller_Api_Auth extends Controller_Rest
 		// return JWT token
 		return [
 			'result' => true,
-			'token' => self::create_jwt_token($user_data['username'], $user_data['email']),
+			'token' => Service_Auth::create_jwt_token($user_data['username'], $user_data['email']),
 		];
 	}
 
@@ -131,7 +129,7 @@ class Controller_Api_Auth extends Controller_Rest
 		}
 		return [
 			'result' => true,
-			'token' => self::create_jwt_token($data['name'], $data['email']),
+			'token' => Service_Auth::create_jwt_token($data['name'], $data['email']),
 		];
 	}
 
@@ -146,17 +144,5 @@ class Controller_Api_Auth extends Controller_Rest
 	{
 		$csrf_token = Input::headers(Constant::HEADER_INDEX_CSRF);
 		return Security::check_token($csrf_token);
-	}
-
-	private static function create_jwt_token($name, $email)
-	{
-		$token = [
-			'name' => $name,
-			'email' => $email,
-			'iat' => time(),
-			'exp' => time() + Constant::JWT_EXPIRATION,
-		];
-		$private_key = File::read(Constant::JWT_KEY_PATH, true);
-		return JWT::encode($token, $private_key, Constant::JWT_ALGORITHM);
 	}
 }
