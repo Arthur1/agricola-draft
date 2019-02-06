@@ -1,22 +1,49 @@
 <template>
 	<div class="container">
 		<p>{{ name }}さん、ようこそ！</p>
-		<h2 class="orange-text">進行中のドラフト</h2>
-		<h2 class="orange-text">招待されたドラフト</h2>
+		<h2 class="orange-text">進行中のゲーム</h2>
+		<div class="collection">
+			<router-link v-for="game of games_in_progress" :key="game.game_id" :to="'/game/' + game.game_id" class="collection-item">
+				{{ game.players_number }}人ゲーム / {{ game.regulation }} / {{ game.cards_number_description }}<br>
+				{{ game.owner }}さんが作成 [{{ game.created_at }}]
+			</router-link>
+		</div>
 	</div>
 </template>
 <script>
-	import VueJWT from 'vuejs-jwt'
+	import http from '../services/http.js'
 	export default {
 		data() {
 			return {
-				name: ''
+				name: '',
+				games_in_progress: [],
 			}
 		},
 		mounted() {
 			let jwt = this.$jwt.decode()
 			console.log(jwt)
 			this.name = jwt.name
+			http.post('/games/in_progress', {}, res => {
+				console.log(res.data)
+				this.games_in_progress = res.data
+			}, err => {
+				switch (err.response.status) {
+					case 400:
+						for (let message of err.response.data.error.messages) {
+							M.toast({html: message, classes: 'red white-text'})
+						}
+						break
+					case 401:
+						M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+						this.$router.push('/login')
+						break
+					case 403:
+						M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+						break
+					default:
+						M.toast({html: 'サーバーエラーです', classes: 'red white-text'})
+				}
+			})
 		}
 	}
 </script>
