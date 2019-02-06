@@ -7,6 +7,7 @@ return array(
 	'match_value'      => '『:label』は『:param:1』と一致していません',
 	'match_pattern'    => '『:label』はパターン『:param:1』と一致しません',
 	'match_field'      => '『:label』は『:param:1』と一致していません',
+	'match_collection' => '『:label』は有効な選択肢の中から選択してください',
 	'valid_email'      => '『:label』はメールアドレスが不正です',
 	'valid_emails'     => '『:label』に不正なメールアドレスが含まれてます',
 	'valid_url'        => '『:label』は不正なURLです',
@@ -16,4 +17,6 @@ return array(
 	'valid_string'     => '『:label』は『:rule』で入力する必要があります',
 	'checkbox_require' => '『:label』は:param:1つ以上選択する必要があります',
 	'valid_date'       => '『:label』は不正な日付フォーマットです',
+	'array_unique'     => '『:label』はそれぞれ異なる内容を入力してください',
+	'exists_user'      => '『:label』は存在しません',
 );

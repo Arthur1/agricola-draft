@@ -30,6 +30,40 @@ class Controller_Api_Games extends Controller_Rest
 				]
 			];
 		}
+
+		$data = Input::json();
+
+		// Validation
+		$val = Validation::forge();
+		$val->add_callable('MyValidation');
+		$val->add('players_number', 'プレイヤー人数')
+			->add_rule('required')
+			->add_rule('match_collection', [2, 3, 4, 5, 6]);
+		$val->add('regulation_type', 'レギュレーション')
+			->add_rule('required')
+			->add_rule('match_collection', [1, 2, 3, 4, 5]);
+		for ($i = 0; $i < Input::json('players_number'); $i++) {
+			$val->add('players.' . $i, 'ユーザー名(' . ($i + 1) . '人目)')
+				->add_rule('required')
+				->add_rule('exists_user');
+		}
+		$val->add('players', 'ユーザー名')
+			->add_rule('array_unique');
+
+		if (! $val->run($data)) {
+			$this->status_code = 400;
+			$messages = [];
+			foreach ($val->error() as $error) {
+				$messages[] = $error->get_message();
+			}
+			return [
+				'result' => false,
+				'error' => [
+					'messages' => $messages,
+				]
+			];
+		}
+
 		return [
 				'result' => true,
 				'error' => [

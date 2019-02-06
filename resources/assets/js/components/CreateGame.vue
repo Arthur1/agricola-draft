@@ -55,10 +55,12 @@
 		methods: {
 			create() {
 				this.is_push = true
+				let players = this.players
+				players.length = this.players_number
 				let params = {
 					players_number: this.players_number,
 					regulation_type: this.regulation_type,
-					players: this.players,
+					players: players,
 				}
 				http.post('/games/create', params, res => {
 					M.toast({html: 'ゲームを作成しました', classes: 'teal white-text'})

@@ -79,8 +79,9 @@ class Controller_Api_Auth extends Controller_Rest
 			->add_rule('required');
 		$val->add('password', 'パスワード')
 			->add_rule('required');
-		$val->add('password_check')
-			->add_rule('required');
+		$val->add('password_check', 'パスワード(確認)')
+			->add_rule('required')
+			->add_rule('match_field', 'password');
 		$val->add('email', 'メールアドレス')
 			->add_rule('required')
 			->add_rule('valid_email');
