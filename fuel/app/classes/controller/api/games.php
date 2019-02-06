@@ -42,6 +42,9 @@ class Controller_Api_Games extends Controller_Rest
 		$val->add('regulation_type', 'レギュレーション')
 			->add_rule('required')
 			->add_rule('match_collection', [1, 2, 3, 4, 5]);
+		$val->add('cards_number', 'カード枚数')
+			->add_rule('required')
+			->add_rule('match_collection', [7, 8, 10]);
 		for ($i = 0; $i < Input::json('players_number'); $i++) {
 			$val->add('players.' . $i, 'ユーザー名(' . ($i + 1) . '人目)')
 				->add_rule('required')
@@ -64,12 +67,17 @@ class Controller_Api_Games extends Controller_Rest
 			];
 		}
 
+		$game_id = uniqid(rand());
+		$owner = $auth->get_name();
+		Model_Games::create($game_id, $owner, $data);
+
+		$players = $data['players'];
+		shuffle($players);
+		Model_GamesPlayers::create($game_id, $players);
+
 		return [
-				'result' => true,
-				'error' => [
-					'message' => 'お手数ですが、再度ログインしてください'
-				]
-			];
+			'result' => true,
+		];
 	}
 
 	private static function check_token()
