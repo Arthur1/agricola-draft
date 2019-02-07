@@ -4,6 +4,7 @@ import Home from './components/Home.vue'
 import Register from './components/Register.vue'
 import Login from './components/Login.vue'
 import CreateGame from './components/CreateGame.vue'
+import Draft from './components/Draft.vue'
 
 Vue.use(VueRouter)
 
@@ -31,6 +32,11 @@ const router = new VueRouter({
 			name: 'ゲーム作成',
 			component: CreateGame,
 		},
+		{
+			path: '/draft/:game_id',
+			name: 'ドラフト',
+			component: Draft,
+		}
 	],
 
 	scrollBehavior (to, from, savedPosition) {

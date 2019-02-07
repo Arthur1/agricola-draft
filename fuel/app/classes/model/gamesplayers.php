@@ -10,4 +10,13 @@ class Model_GamesPlayers
 		}
 		$query->execute();
 	}
+
+	public static function get_by_game_id($game_id)
+	{
+		$query = DB::select()
+					->from('games_players')
+					->where('game_id', '=', $game_id)
+					->order_by('player_order', 'asc');
+		return $query->execute()->as_array();
+	}
 }

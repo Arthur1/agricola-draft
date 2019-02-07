@@ -1,6 +1,26 @@
 <?php
 class Model_OccupationsMaster
 {
+	const DECK_LIST = [
+		'E' => 'Eデッキ(旧版基本)',
+		'I' => 'Iデッキ(旧版基本)',
+		'K' => 'Kデッキ(旧版基本)',
+		'G' => 'Gデッキ',
+		'Z' => 'Zデッキ',
+		'alpha' => 'αデッキ(WMデッキ)',
+		'beta' => 'βデッキ(WMデッキ)',
+		'gamma' => 'γデッキ(WMデッキ)',
+		'delta' => 'δデッキ(WMデッキ)',
+		'epsilon' => 'εデッキ(WMデッキ)',
+		'CZ' => 'Čデッキ',
+		'O' => 'Öデッキ',
+		'P' => 'πデッキ',
+		'WA' => 'WAデッキ',
+		'FL' => 'FLデッキ',
+		'FR' => 'FRデッキ',
+		'NL' => 'NLデッキ',
+	];
+
 	public static function get_for_create_game($regulation_type, $players_number)
 	{
 		switch ($regulation_type) {

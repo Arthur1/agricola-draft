@@ -3,8 +3,8 @@
 		<p>{{ name }}さん、ようこそ！</p>
 		<h2 class="orange-text">進行中のゲーム</h2>
 		<div class="collection">
-			<router-link v-for="game of games_in_progress" :key="game.game_id" :to="'/game/' + game.game_id" class="collection-item">
-				{{ game.players_number }}人ゲーム / {{ game.regulation }} / {{ game.cards_number_description }}<br>
+			<router-link v-for="game of games_in_progress" :key="game.game_id" :to="'/draft/' + game.game_id" class="collection-item">
+				{{ game.players_number }}人ゲーム / {{ game.player_order }}番手 / {{ game.regulation }} / {{ game.cards_number_description }}<br>
 				{{ game.owner }}さんが作成 [{{ game.created_at }}]
 			</router-link>
 		</div>
@@ -23,7 +23,7 @@
 			let jwt = this.$jwt.decode()
 			console.log(jwt)
 			this.name = jwt.name
-			http.post('/games/in_progress', {}, res => {
+			http.get('/games/in_progress', {}, res => {
 				console.log(res.data)
 				this.games_in_progress = res.data
 			}, err => {
