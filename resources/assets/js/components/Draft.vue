@@ -63,11 +63,10 @@
 				is_push: false,
 			}
 		},
-		mounted() {
+		created() {
 			let jwt = this.$jwt.decode()
 			this.name = jwt.name
 			http.get('/games/drafts/' + this.$route.params.game_id, {}, res => {
-				console.log(res.data)
 				if (res.data.is_finished) {
 					this.$router.push('/result/' + this.$route.params.game_id)
 					return
@@ -107,7 +106,6 @@
 					picked_improvement: this.picked_improvement,
 				}
 				http.post('/games/drafts/' + this.$route.params.game_id, params, res => {
-					console.log(res.data)
 					this.$router.push('/draft/waiting/' + this.$route.params.game_id)
 				}, err => {
 					switch (err.response.status) {

@@ -1,5 +1,8 @@
 <template>
 	<div>
+		<div class="progress">
+			<div class="indeterminate"></div>
+		</div>
 		<div class="container">
 			<h3 class="teal-text">ゲーム詳細</h3>
 			<div class="collection">
@@ -31,7 +34,7 @@
 				interval: null,
 			}
 		},
-		mounted() {
+		created() {
 			let jwt = this.$jwt.decode()
 			this.name = jwt.name
 			let game_id = this.$route.params.game_id
@@ -66,9 +69,7 @@
 					} else if (res.data.is_ready) {
 						this.$router.push('/draft/' + game_id)
 					}
-					console.log('interval')
 				}, err => {
-					console.log(err)
 					switch (err.response.status) {
 						case 404:
 							M.toast({html: err.response.data.error.message, classes: 'red white-text'})
@@ -94,3 +95,8 @@
 		}
 	}
 </script>
+<style scoped>
+	.progress {
+		margin: 0;
+	}
+</style>

@@ -131,8 +131,8 @@ class Controller_Api_Games extends Controller_Rest
 			];
 		}
 
-		$picked_occupations = Model_GamesOccupations::get_picked_hands($game_id, $player_order);
-		$picked_improvements = Model_GamesImprovements::get_picked_hands($game_id, $player_order);
+		$picked_occupations = Service_Games::get_picked_occupations($game_id, $player_order);
+		$picked_improvements = Service_Games::get_picked_improvements($game_id, $player_order);
 		$picked_order = Service_Games::get_current_picked_order($picked_occupations);
 
 		$before_player_order = Service_Games::before_player_order($player_order, $players_number);
@@ -195,8 +195,8 @@ class Controller_Api_Games extends Controller_Rest
 		$my_player_data = $players_data[$my_player_data_key];
 		$player_order = (int) $my_player_data['player_order'];
 
-		$picked_occupations = Model_GamesOccupations::get_picked_hands($game_id, $player_order);
-		$picked_improvements = Model_GamesImprovements::get_picked_hands($game_id, $player_order);
+		$picked_occupations = Service_Games::get_picked_occupations($game_id, $player_order);
+		$picked_improvements = Service_Games::get_picked_improvements($game_id, $player_order);
 		$picked_order = Service_Games::get_current_picked_order($picked_occupations);
 		if ($picked_order > 7) {
 			$this->status_code = 404;
@@ -261,8 +261,8 @@ class Controller_Api_Games extends Controller_Rest
 		$my_player_data = $players_data[$my_player_data_key];
 		$player_order = (int) $my_player_data['player_order'];
 
-		$picked_occupations = Model_GamesOccupations::get_picked_hands($game_id, $player_order);
-		$picked_improvements = Model_GamesImprovements::get_picked_hands($game_id, $player_order);
+		$picked_occupations = Service_Games::get_picked_occupations($game_id, $player_order);
+		$picked_improvements = Service_Games::get_picked_improvements($game_id, $player_order);
 		$picked_order = Service_Games::get_current_picked_order($picked_occupations);
 		return [
 			'picked_occupations' => $picked_occupations,
@@ -306,7 +306,7 @@ class Controller_Api_Games extends Controller_Rest
 		$my_player_data = $players_data[$my_player_data_key];
 		$player_order = (int) $my_player_data['player_order'];
 
-		$picked_occupations = Model_GamesOccupations::get_picked_hands($game_id, $player_order);
+		$picked_occupations = Service_Games::get_picked_occupations($game_id, $player_order);
 		$picked_order = Service_Games::get_current_picked_order($picked_occupations);
 		if ($picked_order > 7) {
 			return [
@@ -321,6 +321,44 @@ class Controller_Api_Games extends Controller_Rest
 		return [
 			'is_finished' => false,
 			'is_ready' => $is_ready,
+		];
+	}
+
+	public function get_result($game_id)
+	{
+		// CSRF token check
+		if (! self::check_token()) {
+			$this->status_code = 403;
+			return Service_Api::error('お手数ですが、再度送信してください');
+		}
+
+		$auth = new Service_Auth();
+		$auth->check();
+		$name = $auth->get_name();
+
+		$game_data = Model_Games::get($game_id);
+		if ($game_data === false) {
+			$this->status_code = 404;
+			return Service_Api::error('このゲームは存在しません');
+		}
+		if (! $game_data['status']) {
+			$this->status_code = 404;
+			return Service_Api::error('このゲームはまだ終了していません');
+		}
+		$game_data['regulation'] = self::REGULATION_LIST[$game_data['regulation_type']];
+		$game_data['cards_number_description'] = self::CARDS_NUMBER_LIST[$game_data['cards_number']];
+		$game_data['created_at'] = date('Y/m/d H:i', $game_data['created_at']);
+
+		$players_data = Model_GamesPlayers::get_by_game_id($game_id);
+		$occupations_data = Service_Games::get_occupations_data_for_result($game_id);
+		$improvements_data = Service_Games::get_improvements_data_for_result($game_id);
+
+		return [
+			'game_data' => $game_data,
+			'players_data' => $players_data,
+			'occupations_data' => $occupations_data,
+			'improvements_data' => $improvements_data,
+			'name' => $name,
 		];
 	}
 

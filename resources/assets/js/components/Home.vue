@@ -27,9 +27,8 @@
 				games_is_finished: [],
 			}
 		},
-		mounted() {
+		created() {
 			let jwt = this.$jwt.decode()
-			console.log(jwt)
 			this.name = jwt.name
 			http.get('/games/games_list', {}, res => {
 				this.games_in_progress = res.data.games_in_progress

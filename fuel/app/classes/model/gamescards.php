@@ -57,4 +57,17 @@ class Model_GamesCards
 					->and_where('card_id', '=', $card_id);
 		$query->execute();
 	}
+
+	public static function get_all_by_game_id($game_id)
+	{
+		$query = DB::select()
+					->from(static::$table_name)
+					->join(static::$master_table_name, 'inner')
+					->on(static::$table_name.'.card_id', '=', static::$master_table_name.'.card_id')
+					->where('game_id', '=', $game_id)
+					->and_where('picked_player_order', '!=', null)
+					->order_by('picked_player_order', 'asc')
+					->order_by('picked_order', 'asc');
+		return $query->execute()->as_array();
+	}
 }

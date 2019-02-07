@@ -65,33 +65,79 @@ class Service_games
 
 	public static function hands_order(int $player_order, int $picked_order, int $players_number)
 	{
-		Log::error($player_order);
-		Log::error($picked_order);
-		Log::error($players_number);
 		$hands_order = ($player_order - $picked_order + 1 + $players_number * 10) % $players_number;
 		if ($hands_order === 0) {
 			$hands_order = $players_number;
 		}
-		Log::error($hands_order);
 		return $hands_order;
 	}
 
 	public static function get_picking_occupations(string $game_id, int $hands_order)
 	{
 		$occupations = Model_GamesOccupations::get_picking_hands($game_id, $hands_order);
-		foreach ($occupations as &$occupation) {
-			$occupation['deck_display'] = Model_OccupationsMaster::DECK_LIST[$occupation['deck']];
-		}
+		self::append_occupations_detail($occupations);
 		return $occupations;
 	}
 
 	public static function get_picking_improvements(string $game_id, int $hands_order)
 	{
 		$improvements = Model_GamesImprovements::get_picking_hands($game_id, $hands_order);
+		self::append_improvements_detail($improvements);
+		return $improvements;
+	}
+
+	public static function get_picked_occupations(string $game_id, int $hands_order)
+	{
+		$occupations = Model_GamesOccupations::get_picked_hands($game_id, $hands_order);
+		self::append_occupations_detail($occupations);
+		return $occupations;
+	}
+
+	public static function get_picked_improvements(string $game_id, int $hands_order)
+	{
+		$improvements = Model_GamesImprovements::get_picked_hands($game_id, $hands_order);
+		self::append_improvements_detail($improvements);
+		return $improvements;
+	}
+
+	public static function get_all_occupations_by_game_id(string $game_id)
+	{
+		$occupations = Model_GamesOccupations::get_all_by_game_id($game_id);
+		self::append_improvements_detail($occupations);
+		return $occupations;
+	}
+
+	public static function get_all_improvements_by_game_id(string $game_id)
+	{
+		$improvements = Model_GamesImprovements::get_all_by_game_id($game_id);
+		self::append_improvements_detail($improvements);
+		return $improvements;
+	}
+
+	public static function append_occupations_detail(array &$occupations)
+	{
+		foreach ($occupations as &$occupation) {
+			$occupation['deck_display'] = Model_OccupationsMaster::DECK_LIST[$occupation['deck']];
+		}
+	}
+
+	public static function append_improvements_detail(array &$improvements)
+	{
 		foreach ($improvements as &$improvement) {
 			$improvement['deck_display'] = Model_ImprovementsMaster::DECK_LIST[$improvement['deck']];
 		}
-		return $improvements;
+	}
+
+	public static function get_occupations_data_for_result(string $game_id)
+	{
+		$records = self::get_all_occupations_by_game_id($game_id);
+		return array_chunk($records, 7);
+	}
+
+	public static function get_improvements_data_for_result(string $game_id)
+	{
+		$records = self::get_all_improvements_by_game_id($game_id);
+		return array_chunk($records, 7);
 	}
 
 	public static function get_current_picked_order(array $picked_occupations)
