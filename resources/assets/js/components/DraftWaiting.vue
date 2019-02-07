@@ -1,0 +1,96 @@
+<template>
+	<div>
+		<div class="container">
+			<h3 class="teal-text">ゲーム詳細</h3>
+			<div class="collection">
+				<div class="collection-item">
+					{{ game_data.players_number }}人ゲーム / {{ game_data.regulation }} / {{ game_data.cards_number_description }}<br>
+					{{ game_data.owner }}さんが作成 [{{ game_data.created_at }}]
+				</div>
+				<div class="collection-item">
+					<div v-for="player of players_data" :key="player.player_order" v-bind:class="{ 'teal-text': name === player.name }">
+						{{ player.player_order }}番手: {{ player.name }}
+					</div>
+				</div>
+			</div>
+			<h3 class="teal-text">待機中</h3>
+			他のプレイヤーの入力完了まで待機しています。
+		</div>
+	</div>
+</template>
+<script>
+	import http from '../services/http.js'
+	export default {
+		data() {
+			return {
+				name: '',
+				game_data: {},
+				players_data: {},
+				picked_occupations: [],
+				picked_improvements: [],
+				interval: null,
+			}
+		},
+		mounted() {
+			let jwt = this.$jwt.decode()
+			this.name = jwt.name
+			let game_id = this.$route.params.game_id
+			http.get('/games/waiting/' + game_id, {}, res => {
+				this.game_data = res.data.game_data
+				this.players_data = res.data.players_data
+				this.picked_occupations = res.data.picked_occupations
+				this.picked_improvements = res.data.picked_improvements
+			}, err => {
+				switch (err.response.status) {
+					case 404:
+						M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+						this.$router.push('/')
+						break
+					case 401:
+						M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+						this.$router.push('/login')
+						break
+					case 403:
+						M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+						this.$router.push('/')
+						break
+					default:
+						M.toast({html: 'サーバーエラーです', classes: 'red white-text'})
+						//this.$router.push('/')
+				}
+			})
+			this.interval = setInterval(() => {
+      			http.get('/games/is_ready/' + game_id, {}, res => {
+					if (res.data.is_finished) {
+						this.$router.push('/result/' + game_id)
+					} else if (res.data.is_ready) {
+						this.$router.push('/draft/' + game_id)
+					}
+					console.log('interval')
+				}, err => {
+					console.log(err)
+					switch (err.response.status) {
+						case 404:
+							M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+							this.$router.push('/')
+							break
+						case 401:
+							M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+							this.$router.push('/login')
+							break
+						case 403:
+							M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+							this.$router.push('/')
+							break
+						default:
+							M.toast({html: 'サーバーエラーです', classes: 'red white-text'})
+							//this.$router.push('/')
+					}
+				})
+    		}, 3 * 1000)
+		},
+		beforeDestroy() {
+			clearInterval(this.interval)
+		}
+	}
+</script>

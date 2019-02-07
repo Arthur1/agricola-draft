@@ -5,6 +5,7 @@ import Register from './components/Register.vue'
 import Login from './components/Login.vue'
 import CreateGame from './components/CreateGame.vue'
 import Draft from './components/Draft.vue'
+import DraftWaiting from './components/DraftWaiting.vue'
 
 Vue.use(VueRouter)
 
@@ -36,7 +37,12 @@ const router = new VueRouter({
 			path: '/draft/:game_id',
 			name: 'ドラフト',
 			component: Draft,
-		}
+		},
+		{
+			path: '/draft/waiting/:game_id',
+			name: '待機中',
+			component: DraftWaiting,
+		},
 	],
 
 	scrollBehavior (to, from, savedPosition) {

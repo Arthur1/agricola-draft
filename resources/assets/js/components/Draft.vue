@@ -68,11 +68,11 @@
 			this.name = jwt.name
 			http.get('/games/drafts/' + this.$route.params.game_id, {}, res => {
 				console.log(res.data)
-				if (res.data.is_done) {
-					this.$router.push('/')
+				if (res.data.is_finished) {
+					this.$router.push('/result/' + this.$route.params.game_id)
 					return
-				} else if (res.data.is_not_ready) {
-					this.$router.push('/games/drafts/waiting/' + this.$route.params.game_id)
+				} else if (! res.data.is_ready) {
+					this.$router.push('/draft/waiting/' + this.$route.params.game_id)
 					return
 				}
 				this.game_data = res.data.game_data
@@ -108,7 +108,7 @@
 				}
 				http.post('/games/drafts/' + this.$route.params.game_id, params, res => {
 					console.log(res.data)
-					this.$router.push('/games/drafts/waiting/' + this.$route.params.game_id)
+					this.$router.push('/draft/waiting/' + this.$route.params.game_id)
 				}, err => {
 					switch (err.response.status) {
 						case 400:

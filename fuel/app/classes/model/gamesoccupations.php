@@ -16,4 +16,15 @@ class Model_GamesOccupations extends Model_GamesCards
 		$count = (int) $records[0]['count'];
 		return $count === 1;
 	}
+
+	public static function is_finished($game_id, $players_number)
+	{
+		$query = DB::select(DB::expr('COUNT(*) AS `count`'))
+					->from('games_occupations')
+					->where('game_id', '=', $game_id)
+					->and_where('picked_order', '=', 7);
+		$records = $query->execute()->as_array();
+		$count = (int) $records[0]['count'];
+		return $count === $players_number;
+	}
 }

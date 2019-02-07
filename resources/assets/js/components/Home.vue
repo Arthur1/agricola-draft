@@ -1,9 +1,16 @@
 <template>
 	<div class="container">
 		<p>{{ name }}さん、ようこそ！</p>
-		<h2 class="orange-text">進行中のゲーム</h2>
+		<h2 class="teal-text">進行中のゲーム</h2>
 		<div class="collection">
 			<router-link v-for="game of games_in_progress" :key="game.game_id" :to="'/draft/' + game.game_id" class="collection-item">
+				{{ game.players_number }}人ゲーム / {{ game.player_order }}番手 / {{ game.regulation }} / {{ game.cards_number_description }}<br>
+				{{ game.owner }}さんが作成 [{{ game.created_at }}]
+			</router-link>
+		</div>
+		<h2 class="teal-text">終了したゲーム</h2>
+		<div class="collection">
+			<router-link v-for="game of games_is_finished" :key="game.game_id" :to="'/result/' + game.game_id" class="collection-item">
 				{{ game.players_number }}人ゲーム / {{ game.player_order }}番手 / {{ game.regulation }} / {{ game.cards_number_description }}<br>
 				{{ game.owner }}さんが作成 [{{ game.created_at }}]
 			</router-link>
@@ -17,15 +24,16 @@
 			return {
 				name: '',
 				games_in_progress: [],
+				games_is_finished: [],
 			}
 		},
 		mounted() {
 			let jwt = this.$jwt.decode()
 			console.log(jwt)
 			this.name = jwt.name
-			http.get('/games/in_progress', {}, res => {
-				console.log(res.data)
-				this.games_in_progress = res.data
+			http.get('/games/games_list', {}, res => {
+				this.games_in_progress = res.data.games_in_progress
+				this.games_is_finished = res.data.games_is_finished
 			}, err => {
 				switch (err.response.status) {
 					case 400:

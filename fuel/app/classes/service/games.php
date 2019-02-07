@@ -65,10 +65,14 @@ class Service_games
 
 	public static function hands_order(int $player_order, int $picked_order, int $players_number)
 	{
-		$hands_order = ($player_order - $picked_order + 1) % $players_number;
+		Log::error($player_order);
+		Log::error($picked_order);
+		Log::error($players_number);
+		$hands_order = ($player_order - $picked_order + 1 + $players_number * 10) % $players_number;
 		if ($hands_order === 0) {
 			$hands_order = $players_number;
 		}
+		Log::error($hands_order);
 		return $hands_order;
 	}
 
@@ -96,7 +100,7 @@ class Service_games
 			return 1;
 		}
 		$picked_orders = array_column($picked_occupations, 'picked_order');
-		return max($picked_orders);
+		return max($picked_orders) + 1;
 	}
 
 	public static function create_occupations(string $game_id, int $cards_number, int $players_number, int $regulation_type)

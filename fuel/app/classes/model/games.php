@@ -15,7 +15,7 @@ class Model_Games
 		DB::insert('games')->set($values)->execute();
 	}
 
-	public static function get_in_progress($name)
+	public static function get_all_in_progress($name)
 	{
 		$query = DB::select()
 					->from('games_players')
@@ -27,15 +27,36 @@ class Model_Games
 		return $query->execute()->as_array();
 	}
 
-	public static function get($game_id) {
+	public static function get_all_is_finished($name)
+	{
+		$query = DB::select()
+					->from('games_players')
+					->where('name', '=', $name)
+					->join('games', 'inner')
+					->on('games_players.game_id', '=', 'games.game_id')
+					->where('games.status', '=', 1)
+					->order_by('created_at', 'desc');
+		return $query->execute()->as_array();
+	}
+
+
+	public static function get($game_id)
+	{
 		$query = DB::select()
 					->from('games')
-					->where('game_id', '=', $game_id)
-					->and_where('status', '=', 0);
+					->where('game_id', '=', $game_id);
 		$records = $query->execute()->as_array();
 		if (count($records) === 0) {
 			return false;
 		}
 		return $records[0];
+	}
+
+	public static function update_status($game_id)
+	{
+		$query = DB::update('games')
+					->set(['status' => 1])
+					->where('game_id', '=', $game_id);
+		$query->execute();
 	}
 }
