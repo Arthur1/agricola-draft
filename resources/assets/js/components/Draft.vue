@@ -36,6 +36,9 @@
 						</li>
 					</ul>
 				</div>
+				<div class="col s12 input-field">
+					<button @click="send()" class="btn waves-effect waves-light teal" v-bind:disabled="is_push">送信<i class="material-icons right">send</i></button>
+				</div>
 			</div>
 		</div>
 		<card-modal v-for="occupation in picking_occupations" :key="'modal_'+occupation.card_id" type="occupation" :data="occupation"></card-modal>
@@ -54,8 +57,10 @@
 				picking_occupations: [],
 				picking_improvements: [],
 				picked_order: 0,
+				hands_order: 0,
 				picked_occupation: '',
 				picked_improvement: '',
+				is_push: false,
 			}
 		},
 		mounted() {
@@ -63,14 +68,22 @@
 			this.name = jwt.name
 			http.get('/games/drafts/' + this.$route.params.game_id, {}, res => {
 				console.log(res.data)
+				if (res.data.is_done) {
+					this.$router.push('/')
+					return
+				} else if (res.data.is_not_ready) {
+					this.$router.push('/games/drafts/waiting/' + this.$route.params.game_id)
+					return
+				}
 				this.game_data = res.data.game_data
 				this.players_data = res.data.players_data
 				this.picking_occupations = res.data.picking_occupations
 				this.picking_improvements = res.data.picking_improvements
 				this.picked_order = res.data.picked_order
+				this.hands_order = res.data.hands_order
 			}, err => {
 				switch (err.response.status) {
-					case 400:
+					case 404:
 						M.toast({html: err.response.data.error.message, classes: 'red white-text'})
 						this.$router.push('/')
 						break
@@ -86,8 +99,48 @@
 				}
 			})
 		},
+		methods: {
+			send() {
+				this.is_push = true
+				let params = {
+					picked_occupation: this.picked_occupation,
+					picked_improvement: this.picked_improvement,
+				}
+				http.post('/games/drafts/' + this.$route.params.game_id, params, res => {
+					console.log(res.data)
+					this.$router.push('/games/drafts/waiting/' + this.$route.params.game_id)
+				}, err => {
+					switch (err.response.status) {
+						case 400:
+							for (let message of err.response.data.error.messages) {
+								M.toast({html: message, classes: 'red white-text'})
+							}
+							break
+						case 401:
+							M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+							this.$router.push('/login')
+							break
+						case 403:
+							M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+							break
+						case 404:
+							M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+							this.$router.push('/')
+							break
+						default:
+							M.toast({html: 'サーバーエラーです', classes: 'red white-text'})
+					}
+				})
+				this.is_push = false
+			}
+		},
 		components: {
 			CardModal
 		}
 	}
 </script>
+<style scoped>
+	.modal-trigger {
+		cursor: pointer;
+	}
+</style>

@@ -95,18 +95,9 @@ class Controller_Api_Games extends Controller_Rest
 			return Service_Api::error('お手数ですが、再度ログインしてください');
 		}
 
-		$players_data = Model_GamesPlayers::get_by_game_id($game_id);
-		$my_player_data_key = array_search($auth->get_name(), array_column($players_data, 'name'));
-		if ($my_player_data_key === false) {
-			$this->status_code = 401;
-			return Service_Api::error('お手数ですが、再度ログインしてください');
-		}
-		$my_player_data = $players_data[$my_player_data_key];
-		$player_order = (int) $my_player_data['player_order'];
-
 		$game_data = Model_Games::get($game_id);
 		if ($game_data === false) {
-			$this->status_code = 400;
+			$this->status_code = 404;
 			return Service_Api::error('このゲームは存在しません');
 		}
 		$game_data['regulation'] = self::REGULATION_LIST[$game_data['regulation_type']];
@@ -114,7 +105,18 @@ class Controller_Api_Games extends Controller_Rest
 		$game_data['created_at'] = date('Y/m/d H:i', $game_data['created_at']);
 		$players_number = $game_data['players_number'];
 
-		$picked_order = Model_GamesOccupations::get_current_picked_order($game_id, $player_order);
+		$players_data = Model_GamesPlayers::get_by_game_id($game_id);
+		$my_player_data_key = array_search($auth->get_name(), array_column($players_data, 'name'));
+		if ($my_player_data_key === false) {
+			$this->status_code = 404;
+			return Service_Api::error('このゲームのプレイヤーではありません');
+		}
+		$my_player_data = $players_data[$my_player_data_key];
+		$player_order = (int) $my_player_data['player_order'];
+
+		$picked_occupations = Model_GamesOccupations::get_picked_hands($game_id, $player_order);
+		$picked_improvements = Model_GamesImprovements::get_picked_hands($game_id, $player_order);
+		$picked_order = Service_Games::get_current_picked_order($picked_occupations);
 		if ($picked_order > 7) {
 			return [
 				'game_data' => $game_data,
@@ -132,7 +134,7 @@ class Controller_Api_Games extends Controller_Rest
 				'game_data' => $game_data,
 				'players_data' => $players_data,
 				'is_done' => false,
-				'is_ready' => false,
+				'is_not_ready' => true,
 			];
 		}
 
@@ -146,7 +148,68 @@ class Controller_Api_Games extends Controller_Rest
 			'picking_occupations' => $picking_occupations,
 			'picking_improvements' => $picking_improvements,
 			'picked_order' => $picked_order,
+			'picked_occupations' => $picked_occupations,
+			'picked_improvements' => $picked_improvements,
+			'is_done' => false,
+			'is_not_ready' => false,
 		];
+	}
+
+	public function post_drafts($game_id)
+	{
+		// CSRF token check
+		if (! self::check_token()) {
+			$this->status_code = 403;
+			return Service_Api::error('お手数ですが、再度送信してください');
+		}
+
+		// Auth check
+		$auth = new Service_Auth();
+		if (! $auth->check()) {
+			$this->status_code = 401;
+			return Service_Api::error('お手数ですが、再度ログインしてください');
+		}
+
+		$game_data = Model_Games::get($game_id);
+		if ($game_data === false) {
+			$this->status_code = 404;
+			return Service_Api::error('このゲームは存在しません');
+		}
+		$players_number = (int) $game_data['players_number'];
+
+		$players_data = Model_GamesPlayers::get_by_game_id($game_id);
+		$my_player_data_key = array_search($auth->get_name(), array_column($players_data, 'name'));
+		if ($my_player_data_key === false) {
+			$this->status_code = 404;
+			return Service_Api::error('このゲームのプレイヤーではありません');
+		}
+		$my_player_data = $players_data[$my_player_data_key];
+		$player_order = (int) $my_player_data['player_order'];
+
+		$picked_occupations = Model_GamesOccupations::get_picked_hands($game_id, $player_order);
+		$picked_improvements = Model_GamesImprovements::get_picked_hands($game_id, $player_order);
+		$picked_order = Service_Games::get_current_picked_order($picked_occupations);
+		if ($picked_order > 7) {
+			$this->status_code = 404;
+			return Service_Api::error('このゲームは終了しました');
+		}
+
+		// Validation
+		$hands_order = Service_Games::hands_order($player_order, $picked_order, $players_number);
+		$val = Service_Games::validation_draft($game_id, $hands_order);
+		$data = Input::json();
+		if (! $val->run($data)) {
+			$this->status_code = 400;
+			$messages = [];
+			foreach ($val->error() as $error) {
+				$messages[] = $error->get_message();
+			}
+			return Service_Api::error($messages);
+		}
+
+		Model_GamesOccupations::update_pick($game_id, $data['picked_occupation'], $player_order, $picked_order);
+		Model_GamesImprovements::update_pick($game_id, $data['picked_occupation'], $player_order, $picked_order);
+		return [ 'result' => true ];
 	}
 
 	private static function check_token()

@@ -35,6 +35,20 @@ class Service_games
 		return $val;
 	}
 
+	public static function validation_draft($game_id, $hands_order)
+	{
+		$occupations = Model_GamesOccupations::get_picking_hands($game_id, $hands_order);
+		$improvements = Model_GamesImprovements::get_picking_hands($game_id, $hands_order);
+		$val = Validation::forge();
+		$val->add('picked_occupation', '職業')
+			->add_rule('required')
+			->add_rule('match_collection', array_column($occupations, 'card_id'));
+		$val->add('picked_improvement', '小さい進歩')
+			->add_rule('required')
+			->add_rule('match_collection', array_column($improvements, 'card_id'));
+		return $val;
+	}
+
 	public static function before_player_order(int $my_player_order, int $players_number)
 	{
 		$before_player_order = $my_player_order - 1;
@@ -74,6 +88,15 @@ class Service_games
 			$improvement['deck_display'] = Model_ImprovementsMaster::DECK_LIST[$improvement['deck']];
 		}
 		return $improvements;
+	}
+
+	public static function get_current_picked_order(array $picked_occupations)
+	{
+		if (count($picked_occupations) === 0) {
+			return 1;
+		}
+		$picked_orders = array_column($picked_occupations, 'picked_order');
+		return max($picked_orders);
 	}
 
 	public static function create_occupations(string $game_id, int $cards_number, int $players_number, int $regulation_type)
