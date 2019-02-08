@@ -10,6 +10,7 @@ import Vue from 'vue'
 import VueJWT from 'vuejs-jwt'
 import HeaderBar from './components/HeaderBar.vue'
 import router from './router'
+import store from './stores/index.js'
 
 
 /**
@@ -24,8 +25,11 @@ Vue.use(VueJWT, {
 	keyName: 'jwt-token'
 })
 
+Vue.prototype.$is_loggedin = false
+
 const app = new Vue({
 	router,
+	store,
 	el: '#app'
 })
 

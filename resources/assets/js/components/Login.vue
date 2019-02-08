@@ -39,10 +39,10 @@
 					name: this.name,
 					password: this.password
 				}
-				http.post('/auth/login', params, res => {
+				this.$store.dispatch('login', params).then(res => {
 					M.toast({html: 'ログインに成功しました', classes: 'teal white-text'})
 					this.$router.push('/')
-				}, err => {
+				}).catch(err => {
 					switch (err.response.status) {
 						case 400:
 							for (let message of err.response.data.error.messages) {

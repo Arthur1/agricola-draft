@@ -68,16 +68,16 @@
 					password: this.password,
 					password_check: this.password_check
 				}
-				http.post('/auth/register', params, res => {
+				this.$store.dispatch('register', params).then(res => {
 					M.toast({html: 'ユーザー登録に成功しました', classes: 'teal white-text'})
 					this.$router.push('/')
-				}, err => {
+				}).catch(err => {
 					switch (err.response.status) {
 						case 400:
 							for (let message of err.response.data.error.messages) {
 								M.toast({html: message, classes: 'red white-text'})
 							}
-							break
+							break;
 						case 401:
 						case 403:
 							M.toast({html: err.response.data.error.message, classes: 'red white-text'})

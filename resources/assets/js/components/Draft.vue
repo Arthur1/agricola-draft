@@ -64,8 +64,7 @@
 			}
 		},
 		created() {
-			let jwt = this.$jwt.decode()
-			this.name = jwt.name
+			this.name = this.$store.getters.get_name
 			http.get('/games/drafts/' + this.$route.params.game_id, {}, res => {
 				if (res.data.is_finished) {
 					this.$router.push('/result/' + this.$route.params.game_id)
@@ -88,6 +87,7 @@
 						break
 					case 401:
 						M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+						this.$store.dispatch('logout')
 						this.$router.push('/login')
 						break
 					case 403:

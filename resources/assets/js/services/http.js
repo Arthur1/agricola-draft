@@ -41,19 +41,5 @@ export default {
 			config.headers['Authorization']    = `Bearer ${localStorage.getItem('jwt-token')}`
 			return config
 		})
-
-		// Intercept the response and ...
-		axios.interceptors.response.use(response => {
-			// ...get the token from the header or response data if exists, and save it.
-			const token = response.headers['Authorization'] || response.data['token']
-			if (token) {
-				localStorage.setItem('jwt-token', token)
-			}
-
-			return response
-		}, error => {
-			// Also, if we receive a Bad Request / Unauthorized error
-			return Promise.reject(error)
-		})
 	}
 }

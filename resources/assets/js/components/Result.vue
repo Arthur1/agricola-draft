@@ -71,6 +71,7 @@
 						break
 					case 401:
 						M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+						this.$store.dispatch('logout')
 						this.$router.push('/login')
 						break
 					case 403:

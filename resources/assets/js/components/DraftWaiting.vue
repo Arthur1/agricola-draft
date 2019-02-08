@@ -35,8 +35,7 @@
 			}
 		},
 		created() {
-			let jwt = this.$jwt.decode()
-			this.name = jwt.name
+			this.name = this.$store.getters.get_name
 			let game_id = this.$route.params.game_id
 			http.get('/games/waiting/' + game_id, {}, res => {
 				this.game_data = res.data.game_data
@@ -51,6 +50,7 @@
 						break
 					case 401:
 						M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+						this.$store.dispatch('logout')
 						this.$router.push('/login')
 						break
 					case 403:
@@ -77,6 +77,7 @@
 							break
 						case 401:
 							M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+							this.$store.dispatch('logout')
 							this.$router.push('/login')
 							break
 						case 403:

@@ -55,6 +55,8 @@ class Controller_Api_Auth extends Controller_Rest
 		return [
 			'result' => true,
 			'token' => Service_Auth::create_jwt_token($user_data['username'], $user_data['email']),
+			'name' => $user_data['username'],
+			'email' => $user_data['email'],
 		];
 	}
 
@@ -131,6 +133,22 @@ class Controller_Api_Auth extends Controller_Rest
 		return [
 			'result' => true,
 			'token' => Service_Auth::create_jwt_token($data['name'], $data['email']),
+			'name' => $data['name'],
+			'email' => $data['email'],
+		];
+	}
+
+	public function get_me()
+	{
+		// Auth check
+		$auth = new Service_Auth();
+		if (! $auth->check()) {
+			$this->status_code = 401;
+			return [];
+		}
+		return [
+			'name' => $auth->get_name(),
+			'email' => $auth->get_email(),
 		];
 	}
 

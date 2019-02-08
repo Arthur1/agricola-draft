@@ -28,11 +28,10 @@
 			}
 		},
 		created() {
-			let jwt = this.$jwt.decode()
-			this.name = jwt.name
 			http.get('/games/games_list', {}, res => {
 				this.games_in_progress = res.data.games_in_progress
 				this.games_is_finished = res.data.games_is_finished
+				this.name = this.$store.getters.get_name
 			}, err => {
 				switch (err.response.status) {
 					case 400:
@@ -42,6 +41,7 @@
 						break
 					case 401:
 						M.toast({html: err.response.data.error.message, classes: 'red white-text'})
+						this.$store.dispatch('logout')
 						this.$router.push('/login')
 						break
 					case 403:
