@@ -53,7 +53,7 @@ const router = new VueRouter({
 		},
 		{
 			path: '/feature',
-			name: 'Feature',
+			name: '本アプリについて',
 			component: Feature,
 		},
 		{

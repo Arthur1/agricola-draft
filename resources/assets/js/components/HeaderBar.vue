@@ -5,6 +5,7 @@
 			<li v-if="! is_logged_in"><router-link class="sidenav-close" to="/register">ユーザー登録</router-link></li>
 			<li v-if="is_logged_in"><router-link class="sidenav-close" to="/">ホーム</router-link></li>
 			<li v-if="is_logged_in"><router-link class="sidenav-close" to="/create_game">ゲーム作成</router-link></li>
+			<li><router-link class="sidenav-close" to="/feature">本アプリについて</router-link></li>
 			<li v-if="is_logged_in"><a class="sidenav-close" href="javascript:void(0)" @click="logout()" id="logout">ログアウト</a></li>
 		</ul>
 		<header class="navbar-fixed">
@@ -22,6 +23,7 @@
 						<li v-if="! is_logged_in"><router-link class="sidenav-close" to="/register">ユーザー登録</router-link></li>
 						<li v-if="is_logged_in"><router-link class="sidenav-close" to="/">ホーム</router-link><li>
 						<li v-if="is_logged_in"><router-link class="sidenav-close" to="/create_game">ゲーム作成</router-link></li>
+						<li><router-link class="sidenav-close" to="/feature">本アプリについて</router-link></li>
 						<li v-if="is_logged_in"><a class="sidenav-close" href="javascript:void(0)" @click="logout()" id="logout">ログアウト</a></li>
 					</ul>
 				</div>

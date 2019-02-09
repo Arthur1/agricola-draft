@@ -7,7 +7,6 @@
 require('./bootstrap')
 
 import Vue from 'vue'
-import VueJWT from 'vuejs-jwt'
 import HeaderBar from './components/HeaderBar.vue'
 import router from './router'
 import store from './stores/index.js'
@@ -20,10 +19,6 @@ import store from './stores/index.js'
  */
 
 Vue.component('header-bar', HeaderBar)
-
-Vue.use(VueJWT, {
-	keyName: 'jwt-token'
-})
 
 Vue.prototype.$is_loggedin = false
 
