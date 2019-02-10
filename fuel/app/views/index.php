@@ -16,6 +16,18 @@
 	<meta name="author" content="ぶらつき学生連盟,Arthur">
 	<meta property="twitter:card" content="summary">
 	<?= Html::meta([0 => ['property' => 'og:image', 'content' => Uri::create('/apple-touch-icon.png')]]); ?>
+	<?php
+		$ogp = [
+			['property' => 'og:title', 'content' => 'Agricola Online Draft'],
+			['property' => 'og:type', 'content' => 'website'],
+			['property' => 'og:url', 'content' => Uri::current()],
+			['property' => 'og:site_name', 'content' => 'Agricola Online Draft'],
+			['property' => 'og:description', 'content' => 'Agricola Online Draftは、アグリコラのドラフトを手軽に楽しめるWebアプリです。旧版EIKはもちろん、拡張デッキにも対応しています。'],
+			['property' => 'twitter:card', 'content' => 'summary'],
+			['property' => 'og:image', 'content' => Uri::create('/apple-touch-icon.png')],
+		];
+		echo Html::meta($ogp);
+	?>
 	<?= Asset::css('app.css'); ?>
 </head>
 <body class="grey lighten-5">
