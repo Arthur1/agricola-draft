@@ -73,7 +73,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-	const publicPages = ['ユーザー登録', 'ログイン', '結果', '?', 'Feature']
+	const publicPages = ['ユーザー登録', 'ログイン', '結果', '?', '本アプリについて']
 	const authRequired = !publicPages.includes(to.name)
 	const loggedIn = localStorage.getItem('jwt-token')
 	if (authRequired && ! loggedIn) {
