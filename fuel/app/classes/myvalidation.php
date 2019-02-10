@@ -16,4 +16,9 @@ class MyValidation
 		$array_unique = array_unique($val);
 		return count($val) === count ($array_unique);
 	}
+
+	public static function _validation_valid_name($val)
+	{
+		return preg_match('/^[0-9a-zA-Z_]+$/u', $val) > 0;
+	}
 }

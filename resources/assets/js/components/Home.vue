@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<p>{{ name }}さん、ようこそ！</p>
+		<p>{{ name }}さん、ようこそ！アイコンは<a href="https://ja.gravatar.com/" target="_blank">「Gravatar」</a>サービスを利用して表示しています。</p>
 		<h2 class="teal-text">進行中のゲーム</h2>
 		<div class="collection">
 			<router-link v-for="game of games_in_progress" :key="game.game_id" :to="'/draft/' + game.game_id" class="collection-item">

@@ -6,16 +6,22 @@
 			</p>
 			<div class="row">
 				<div class="col input-field s12">
-					<input placeholder="英数字" type="text" name="name" id="form_name" class="validate" required v-model="name">
+					<input placeholder="" type="text" name="name" id="form_name" class="validate" required v-model="name">
 					<label for="form_name">ユーザー名</label>
+					<p>
+						半角英数字またはアンダースコア(_)使用可能、4文字以上
+					</p>
 				</div>
 				<div class="col input-field s12">
-					<input placeholder="英数字" type="email" name="email" id="form_email" class="validate" required v-model="email">
+					<input placeholder="" type="email" name="email" id="form_email" class="validate" required v-model="email">
 					<label for="form_email">メールアドレス</label>
 				</div>
 				<div class="col input-field s12">
 					<input placeholder="" type="password" name="password" id="form_password" class="validate" required v-model="password">
 					<label for="form_email">パスワード</label>
+					<p>
+						8文字以上
+					</p>
 				</div>
 				<div class="col input-field s12">
 					<input placeholder="" type="password" name="password_check" id="form_password_check" class="validate" required v-model="password_check">

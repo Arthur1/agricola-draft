@@ -83,10 +83,14 @@ class Controller_Api_Auth extends Controller_Rest
 
 		// Validation
 		$val = Validation::forge();
+		$val->add_callable(new MyValidation());
 		$val->add('name', 'ユーザー名')
-			->add_rule('required');
+			->add_rule('required')
+			->add_rule('valid_name')
+			->add_rule('min_length', 4);
 		$val->add('password', 'パスワード')
-			->add_rule('required');
+			->add_rule('required')
+			->add_rule('min_length', 8);
 		$val->add('password_check', 'パスワード(確認)')
 			->add_rule('required')
 			->add_rule('match_field', 'password');
