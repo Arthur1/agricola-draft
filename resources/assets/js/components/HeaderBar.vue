@@ -1,6 +1,16 @@
 <template>
 	<div>
 		<ul class="sidenav" id="slide-out">
+			<li v-if="is_logged_in">
+				<div class="user-view">
+					<div class="background">
+						<img src="/assets/img/menubg.png">
+					</div>
+					<router-link class="sidenav-close" to="/"><img class="circle" :src="gravatar_url"></router-link>
+					<router-link class="sidenav-close" to="/"><span class="white-text name">{{ name }}</span></router-link>
+					<router-link class="sidenav-close" to="/"><span class="white-text email">{{ email }}</span></router-link>
+				</div>
+			</li>
 			<li v-if="! is_logged_in"><router-link class="sidenav-close" to="/login">ログイン</router-link></li>
 			<li v-if="! is_logged_in"><router-link class="sidenav-close" to="/register">ユーザー登録</router-link></li>
 			<li v-if="is_logged_in"><router-link class="sidenav-close" to="/">ホーム</router-link></li>
@@ -50,7 +60,16 @@
 		computed: {
 			is_logged_in() {
 				return this.$store.getters.is_logged_in
-			}
+			},
+			name() {
+				return this.$store.getters.get_name
+			},
+			email() {
+				return this.$store.getters.get_email
+			},
+			gravatar_url() {
+				return this.$store.getters.get_gravatar
+			},
 		}
 	}
 </script>
@@ -71,5 +90,8 @@
 			height: 64px;
 			line-height: 64px;
 		}
+	}
+	.background img {
+		width: 100%;
 	}
 </style>

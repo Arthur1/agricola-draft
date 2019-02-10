@@ -1,4 +1,6 @@
 <?php
+use \Gravatar\Gravatar;
+
 class Controller_Api_Auth extends Controller_Rest
 {
 	protected $format = 'json';
@@ -51,12 +53,16 @@ class Controller_Api_Auth extends Controller_Rest
 			];
 		}
 
+		$gravatar = new Gravatar([], true);
+		$gravatar_url = $gravatar->avatar($user_data['email']);
+
 		// return JWT token
 		return [
 			'result' => true,
-			'token' => Service_Auth::create_jwt_token($user_data['username'], $user_data['email']),
+			'token' => Service_Auth::create_jwt_token($user_data['username'], $user_data['email'], $gravatar_url),
 			'name' => $user_data['username'],
 			'email' => $user_data['email'],
+			'gravatar' => $gravatar_url,
 		];
 	}
 
@@ -130,11 +136,16 @@ class Controller_Api_Auth extends Controller_Rest
 				]
 			];
 		}
+
+		$gravatar = new Gravatar([], true);
+		$gravatar_url = $gravatar->avatar($data['email']);
+
 		return [
 			'result' => true,
-			'token' => Service_Auth::create_jwt_token($data['name'], $data['email']),
+			'token' => Service_Auth::create_jwt_token($data['name'], $data['email'], $gravatar_url),
 			'name' => $data['name'],
 			'email' => $data['email'],
+			'gravatar' => $gravatar_url,
 		];
 	}
 
@@ -149,6 +160,7 @@ class Controller_Api_Auth extends Controller_Rest
 		return [
 			'name' => $auth->get_name(),
 			'email' => $auth->get_email(),
+			'gravatar' => $auth->get_gravatar(),
 		];
 	}
 

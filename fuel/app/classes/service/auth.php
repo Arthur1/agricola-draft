@@ -6,6 +6,7 @@ class Service_Auth
 	private $is_authenticated = null;
 	private $name = null;
 	private $email = null;
+	private $gravatar = null;
 	private $jwt_header = '';
 
 	public function __construct() {
@@ -45,11 +46,17 @@ class Service_Auth
 		return $this->email;
 	}
 
-	public static function create_jwt_token($name, $email)
+	public function get_gravatar()
+	{
+		return $this->gravatar;
+	}
+
+	public static function create_jwt_token($name, $email, $gravatar_url)
 	{
 		$token = [
 			'name' => $name,
 			'email' => $email,
+			'gravatar_url' => $gravatar_url,
 			'iat' => time(),
 			'exp' => time() + Constant::JWT_EXPIRATION,
 		];

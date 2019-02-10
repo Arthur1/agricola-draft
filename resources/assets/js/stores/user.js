@@ -5,6 +5,7 @@ export default {
 		name: null,
 		email: null,
 		is_logged_in: false,
+		gravatar: null,
 	},
 
 	mutations: {
@@ -12,12 +13,14 @@ export default {
 			state.is_logged_in = true
 			state.name = decoded_token.name
 			state.email = decoded_token.email
+			state.gravatar = decoded_token.gravatar
 		},
 
 		logout(state) {
 			state.is_logged_in = false
 			state.name = null
 			state.email = null
+			state.gravatar = null
 		},
 	},
 
@@ -79,6 +82,10 @@ export default {
 
 		get_email: state => {
 			return state.email
+		},
+
+		get_gravatar: state => {
+			return state.gravatar
 		},
 	},
 }
