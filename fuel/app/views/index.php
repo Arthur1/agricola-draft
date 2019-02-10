@@ -12,7 +12,10 @@
 	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ff9800">
 	<meta name="msapplication-TileColor" content="#ff9800">
 	<meta name="theme-color" content="#ff9800">
-	<meta name="description" content="Agricola Online Draftは、アグリコラのドラフトを友人と手軽に楽しめるWebアプリです。">
+	<meta name="description" content="Agricola Online Draftは、アグリコラのドラフトを手軽に楽しめるWebアプリです。旧版EIKはもちろん、拡張デッキにも対応しています。">
+	<meta name="author" content="ぶらつき学生連盟,Arthur">
+	<meta name="twitter:card" content="summary">
+	<?= Html::meta([0 => ['property' => 'og:image', 'content' => Uri::create('/apple-touch-icon.png')]]); ?>
 	<?= Asset::css('app.css'); ?>
 </head>
 <body class="grey lighten-5">
