@@ -55,12 +55,6 @@ class Controller_Api_Games extends Controller_Rest
 
 	public function get_games_list()
 	{
-		// CSRF token check
-		if (! self::check_token()) {
-			$this->status_code = 403;
-			return Service_Api::error('お手数ですが、再度送信してください');
-		}
-
 		// Auth check
 		$auth = new Service_Auth();
 		if (! $auth->check()) {
@@ -90,12 +84,6 @@ class Controller_Api_Games extends Controller_Rest
 
 	public function get_drafts($game_id)
 	{
-		// CSRF token check
-		if (! self::check_token()) {
-			$this->status_code = 403;
-			return Service_Api::error('お手数ですが、再度送信してください');
-		}
-
 		// Auth check
 		$auth = new Service_Auth();
 		if (! $auth->check()) {
@@ -229,12 +217,6 @@ class Controller_Api_Games extends Controller_Rest
 
 	public function get_waiting($game_id)
 	{
-		// CSRF token check
-		if (! self::check_token()) {
-			$this->status_code = 403;
-			return Service_Api::error('お手数ですが、再度送信してください');
-		}
-
 		// Auth check
 		$auth = new Service_Auth();
 		if (! $auth->check()) {
@@ -274,12 +256,6 @@ class Controller_Api_Games extends Controller_Rest
 
 	public function get_is_ready($game_id)
 	{
-		// CSRF token check
-		if (! self::check_token()) {
-			$this->status_code = 403;
-			return Service_Api::error('お手数ですが、再度送信してください');
-		}
-
 		// Auth check
 		$auth = new Service_Auth();
 		if (! $auth->check()) {
@@ -326,12 +302,6 @@ class Controller_Api_Games extends Controller_Rest
 
 	public function get_result($game_id)
 	{
-		// CSRF token check
-		if (! self::check_token()) {
-			$this->status_code = 403;
-			return Service_Api::error('お手数ですが、再度送信してください');
-		}
-
 		$auth = new Service_Auth();
 		$auth->check();
 		$name = $auth->get_name();
