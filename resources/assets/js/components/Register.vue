@@ -1,11 +1,9 @@
 <template>
 	<div>
 		<div class="container">
-			<h1 class="orange-text">ユーザー登録</h1>
 			<p>
 				登録の前に、<a href="#modal-terms" class="modal-trigger">利用規約</a>をご覧ください。
 			</p>
-			<h2 class="green-text">入力フォーム</h2>
 			<div class="row">
 				<div class="col input-field s12">
 					<input placeholder="英数字" type="text" name="name" id="form_name" class="validate" required v-model="name">

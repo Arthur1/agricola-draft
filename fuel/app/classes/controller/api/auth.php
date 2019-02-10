@@ -48,7 +48,7 @@ class Controller_Api_Auth extends Controller_Rest
 			return [
 				'result' => false,
 				'error' => [
-					'message' => 'アカウントが存在しません'
+					'message' => 'アカウントが存在しないか、パスワードが違います'
 				]
 			];
 		}
