@@ -62,7 +62,7 @@
 				this.name = res.data.name
 				this.$nextTick(() => {
 					let el = document.querySelector('.tabs')
-					M.Tabs.init(el, {swipeable: true})
+					M.Tabs.init(el, {})
 				})
 			}, err => {
 				switch (err.response.status) {
