@@ -5,11 +5,6 @@ class Controller_Users extends Controller_Rest
 	protected $format = 'json';
 	private $status_code = 200;
 
-	public function get_friends()
-	{
-
-	}
-
 	private static function check_token()
 	{
 		$csrf_token = Input::headers(Constant::HEADER_INDEX_CSRF);

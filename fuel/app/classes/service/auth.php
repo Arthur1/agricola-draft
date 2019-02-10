@@ -28,10 +28,12 @@ class Service_Auth
 			$this->is_authenticated = true;
 			$this->name = $jwt_token->name;
 			$this->email = $jwt_token->email;
+			$this->gravatar = $jwt_token->gravatar;
 		} catch (Exception $e) {
 			$this->is_authenticated = false;
 			$this->name = null;
 			$this->email = null;
+			$this->gravatar = null;
 		}
 		return $this->is_authenticated;
 	}
@@ -51,12 +53,12 @@ class Service_Auth
 		return $this->gravatar;
 	}
 
-	public static function create_jwt_token($name, $email, $gravatar_url)
+	public static function create_jwt_token($name, $email, $gravatar)
 	{
 		$token = [
 			'name' => $name,
 			'email' => $email,
-			'gravatar_url' => $gravatar_url,
+			'gravatar' => $gravatar,
 			'iat' => time(),
 			'exp' => time() + Constant::JWT_EXPIRATION,
 		];
