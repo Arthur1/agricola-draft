@@ -1,7 +1,9 @@
 <template>
 	<div>
 		<ul class="tabs">
-			<li v-for="player in players_data" class="tab col s3"><a :href="'#tab'+player.player_order">{{ player.player_order }}番手</a></li>
+			<li v-for="player in players_data" class="tab col s3">
+				<a :href="'#tab'+player.player_order" :class="{active: player.name === name}">{{ player.player_order }}番手</a>
+			</li>
 		</ul>
 		<div class="container">
 			<div class="collection">
@@ -60,7 +62,7 @@
 				this.name = res.data.name
 				this.$nextTick(() => {
 					let el = document.querySelector('.tabs')
-					M.Tabs.init(el, {})
+					M.Tabs.init(el, {swipeable: true})
 				})
 			}, err => {
 				switch (err.response.status) {

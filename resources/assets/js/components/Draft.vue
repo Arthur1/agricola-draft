@@ -38,11 +38,39 @@
 				</div>
 				<div class="col s12 input-field">
 					<button @click="send()" class="btn waves-effect waves-light teal" v-bind:disabled="is_push">送信<i class="material-icons right">send</i></button>
+					<button data-target="modal_picked_cards" class="modal-trigger btn waves-effect waves-light grey">現在の手札を見る</button>
 				</div>
 			</div>
 		</div>
 		<card-modal v-for="occupation in picking_occupations" :key="'modal_'+occupation.card_id" type="occupation" :data="occupation"></card-modal>
 		<card-modal v-for="improvement in picking_improvements" :key="'modal_'+improvement.card_id" type="improvement" :data="improvement"></card-modal>
+		<card-modal v-for="occupation in picked_occupations" :key="'modal_'+occupation.card_id" type="occupation" :data="occupation"></card-modal>
+		<card-modal v-for="improvement in picked_improvements" :key="'modal_'+improvement.card_id" type="improvement" :data="improvement"></card-modal>
+		<div id="modal_picked_cards" class="modal bottom-sheet">
+			<div class="modal-content">
+				<h3 class="teal-text">現在の手札</h3>
+				<div class="row">
+					<div class="col s12 l6">
+						<h4 class="yellow-text text-darken-2">職業</h4>
+						<ul class="collection">
+							<li v-for="occupation in picked_occupations" class="collection-item" v-bind:id="'list'+occupation.card_id">
+								{{ occupation.japanese_name }}
+								<span :data-target="`modal_`+occupation.card_id" class="modal-trigger new yellow darken-2 badge" data-badge-caption="">{{ occupation.card_id_display }}</span>
+							</li>
+						</ul>
+					</div>
+					<div class="col s12 l6">
+						<h4 class="orange-text text-darken-2">小さい進歩</h4>
+						<ul class="collection">
+							<li v-for="improvement in picked_improvements" class="collection-item" v-bind:id="'list'+improvement.card_id">
+								{{ improvement.japanese_name }}
+								<span :data-target="`modal_`+improvement.card_id" class="modal-trigger new orange darken-2 badge" data-badge-caption="">{{ improvement.card_id_display }}</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 <script>
@@ -56,6 +84,8 @@
 				players_data: [],
 				picking_occupations: [],
 				picking_improvements: [],
+				picked_occupations: [],
+				picked_improvements: [],
 				picked_order: 0,
 				hands_order: 0,
 				picked_occupation: '',
@@ -77,6 +107,8 @@
 				this.players_data = res.data.players_data
 				this.picking_occupations = res.data.picking_occupations
 				this.picking_improvements = res.data.picking_improvements
+				this.picked_occupations = res.data.picked_occupations
+				this.picked_improvements = res.data.picked_improvements
 				this.picked_order = res.data.picked_order
 				this.hands_order = res.data.hands_order
 			}, err => {

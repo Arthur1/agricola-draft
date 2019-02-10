@@ -82,4 +82,9 @@ router.beforeEach((to, from, next) => {
 	next()
 })
 
+router.beforeEach((to, from, next) => {
+  document.title = to.name + ' | Agricola Online Draft'
+  next()
+})
+
 export default router

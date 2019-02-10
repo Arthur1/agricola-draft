@@ -266,7 +266,7 @@ class Controller_Api_Games extends Controller_Rest
 		$picked_order = Service_Games::get_current_picked_order($picked_occupations);
 		return [
 			'picked_occupations' => $picked_occupations,
-			'picked_improvements' => $picked_occupations,
+			'picked_improvements' => $picked_improvements,
 			'game_data' => $game_data,
 			'players_data' => $players_data,
 		];

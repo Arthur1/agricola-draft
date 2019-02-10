@@ -20,8 +20,6 @@ import store from './stores/index.js'
 
 Vue.component('header-bar', HeaderBar)
 
-Vue.prototype.$is_loggedin = false
-
 const app = new Vue({
 	router,
 	store,
