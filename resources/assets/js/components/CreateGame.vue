@@ -20,6 +20,8 @@
 					<option value="0" disabled selected>[未選択]</option>
 					<option value="1">旧版基本(EIK)</option>
 					<option value="2">旧版拡張</option>
+					<option value="3">リバイズド基本＋5-6人拡張</option>
+					<option value="4">リバイズド拡張</option>
 				</select>
 				<label>レギュレーション</label>
 			</div>

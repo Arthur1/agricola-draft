@@ -5,6 +5,8 @@ class Service_games
 	const REGULATION_LIST = [
 		1 => '旧版基本(EIK)',
 		2 => '旧版拡張',
+		3 => 'リバイズド基本＋5-6人拡張',
+		4 => 'リバイズド拡張',
 	];
 	const CARDS_NUMBER_LIST = [
 		7 => '7枚ドラフト',

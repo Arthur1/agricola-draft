@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<p>
-			"Agricola Online Draft"は、スマートフォンで手軽にアグリコラのドラフトを楽しめるアプリです。旧版EIKはもちろん、拡張デッキにも対応しています。リバイズドのカードは後日追加対応予定ですので、お待ちください。
+			"Agricola Online Draft"は、スマートフォンで手軽にアグリコラのドラフトを楽しめるアプリです。旧版EIKはもちろん、拡張デッキやリバイズドエディションにも対応しています。
 		</p>
 		<h3 class="teal-text">使い方</h3>
 		<ol>

@@ -35,6 +35,11 @@ class Controller_Api_Games extends Controller_Rest
 			}
 			return Service_Api::error($messages);
 		}
+		if ($data['regulation_type'] == 3 and $data['cards_number'] == 10 and $data['players_number'] == 6) {
+			$this->status_code = 400;
+			$messages = ['このレギュレーションではカードが足りません'];
+			return Service_Api::error($messages);
+		}
 
 		// ゲームデータ作成
 		$game_id = uniqid(rand());
